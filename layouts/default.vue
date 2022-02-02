@@ -2,7 +2,7 @@
   <div id="app">
     <top-bar class="topbar" />
     <b-button v-b-toggle.sidebar-1>Toggle Sidebar</b-button>
-    <b-sidebar id="sidebar-1" title="Pet actions" shadow backdrop width="270px">
+    <b-sidebar id="sidebar-1" title="Pet actions" shadow backdrop width="350px">
       <side-bar />
     </b-sidebar>
     <main class="my-main">
@@ -58,7 +58,7 @@ export default Vue.extend({
 }
 
 .topbar {
-  background-image: url("../assets/images/back.jpg");
+  background-color: #f5eae6;
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover;
   color: #fff;

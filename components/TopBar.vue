@@ -5,17 +5,6 @@
       <h4 style="color: black; margin-top: 10px"> The pet registration system </h4>
     </div>
 
-<!--    <div class="topbar-container">-->
-<!--      <div>-->
-<!--        <span class="topbar-item"> About </span>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <span class="topbar-item"> Profile </span>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <span class="topbar-item"> Logout </span>-->
-<!--      </div>-->
-<!--    </div>-->
   </div>
 
 </template>

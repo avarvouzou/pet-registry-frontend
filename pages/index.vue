@@ -1,5 +1,5 @@
 <template>
-  <Tutorial />
+<div>sada</div>
 </template>
 
 <script lang="ts">

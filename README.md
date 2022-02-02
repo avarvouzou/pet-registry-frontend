@@ -1,4 +1,4 @@
-# pet-registry2
+# pet-registry-with-nuxt
 
 ## Build Setup
 

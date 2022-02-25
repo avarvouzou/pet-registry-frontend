@@ -1,10 +1,20 @@
 <template>
-  <div style="border-color: white">
+  <div style="border-color: white; box-shadow: 0 0.125rem 0.625rem rgb(0 0 0 / 20%);npm run dev ">
     <div class="d-flex align-items-center justify-content-left">
+      <b-button v-b-toggle.sidebar-1 style="border: none; background-color: transparent">
+        <svg viewBox="0 0 20 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:45px; height:35px; color: black;">
+          <defs>
+            <path
+              id="a"
+              d="M2.5 4.5h19a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-19A.5.5 0 0 1 2 7V5a.5.5 0 0 1 .5-.5zm0 6h19a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-19A.5.5 0 0 1 2 13v-2a.5.5 0 0 1 .5-.5zm0 6h19a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-19A.5.5 0 0 1 2 19v-2a.5.5 0 0 1 .5-.5z"
+            />
+          </defs>
+          <use fill="currentColor" xlink:href="#a" transform="translate(-2 -4)" fill-rule="evenodd" />
+        </svg>
+      </b-button>
       <b-img src="../assets/images/test.png" alt="Italian Trulli" style="width:35px; height:25px;" class="m-3"></b-img>
       <h4 style="color: black; margin-top: 10px"> The pet registration system </h4>
     </div>
-
   </div>
 
 </template>
@@ -14,22 +24,5 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "TopBar",
-  props: {
-    msg: String,
-  },
 });
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped >
-.topbar-container {
-  display: flex;
-  gap: 10ch;
-}
-
-.topbar-item {
-  font-size: 1rem;
-  color: white;
-  font-weight: 400;
-}
-</style>

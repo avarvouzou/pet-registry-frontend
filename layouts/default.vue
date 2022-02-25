@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <top-bar class="topbar" />
-    <b-button v-b-toggle.sidebar-1>Toggle Sidebar</b-button>
     <b-sidebar id="sidebar-1" title="Pet actions" shadow backdrop width="350px">
       <side-bar />
     </b-sidebar>
@@ -26,6 +25,12 @@ export default Vue.extend({
     SideBar,
     FooterComponent
   },
+  // beforeCreate() {
+  //   this.$store.dispatch("user/stateCurrentUserDetails");
+  // },
+  // methods: {
+  //
+  // }
 });
 </script>
 <style >
@@ -43,12 +48,6 @@ export default Vue.extend({
 * {
   font-family: Open Sans, sans-serif;
   //color: white;
-}
-
-.my-main {
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .my-footer {

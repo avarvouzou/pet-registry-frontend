@@ -1,7 +1,6 @@
 <template>
   <footer style="margin-bottom: 0">
-   asdsdadsadsadsadas
-  </footer>
+beautiful footer  </footer>
 </template>
 
 <script lang="ts">

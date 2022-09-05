@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <top-bar class="topbar" />
-    <b-sidebar id="sidebar-1" title="Pet actions" shadow backdrop width="350px">
+    <top-bar :is-logged-in="isLoggedIn" class="topbar" />
+    <b-sidebar v-if="isLoggedIn" id="sidebar-1" title="Pet actions" shadow backdrop width="350px">
       <side-bar />
     </b-sidebar>
     <main class="my-main">
@@ -12,35 +12,47 @@
     <footer-component class="my-footer"></footer-component>
   </div>
 </template>
-<script lang="ts">
-import Vue from "vue";
-import TopBar from "@/components/TopBar.vue";
-import SideBar from "@/components/SideBar.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
+<script>
+import Vue from 'vue'
+import TopBar from '@/components/TopBar.vue'
+import SideBar from '@/components/SideBar.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 
 export default Vue.extend({
-  name: "MainLayout",
+  name: 'MainLayout',
   components: {
     TopBar,
     SideBar,
-    FooterComponent
+    FooterComponent,
   },
-  // beforeCreate() {
-  //   this.$store.dispatch("user/stateCurrentUserDetails");
-  // },
-  // methods: {
-  //
-  // }
-});
+  data() {
+    return {
+      isLoggedIn: false,
+    }
+  },
+  mounted() {
+    this.fetchUserDetails()
+  },
+  methods: {
+    fetchUserDetails() {
+      this.$axios
+        .get('me')
+        .then((response) => {
+          console.log(response)
+          this.isLoggedIn = true;
+        })
+        .catch(this.$router.push('/login'))
+    },
+  },
+})
 </script>
-<style >
+<style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: #f8f8f8;
   position: relative;
   min-height: 100vh;
 }
@@ -63,6 +75,4 @@ export default Vue.extend({
   color: #fff;
   padding: 10px;
 }
-
-
 </style>

@@ -1,0 +1,69 @@
+<template>
+  <div style="margin: auto; width: 50%; padding-top: 8rem">
+    <h3 class="mt-5 mb-5">Please sign in</h3>
+    <b-form style="width: 30%; margin: auto" >
+      <b-form-group
+        id="username"
+        label="Username:"
+        label-for="username"
+        label-align="left"
+      >
+        <b-form-input
+          id="username"
+          v-model="form.username"
+          placeholder="Enter username"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group
+        id="password"
+        label="Password:"
+        label-for="input-2"
+        label-align="left"
+      >
+        <b-form-input
+          id="input-2"
+          v-model="form.password"
+          placeholder="Enter password"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-button type="submit" variant="primary" style="width: 100%" class="mt-3"
+        @click="signIn">Sign in</b-button
+      >
+    </b-form>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        username: '',
+        password: "",
+      },
+      show: true,
+    }
+  },
+  methods: {
+    signIn() {
+      this.$axios.post('/login', {
+        username: this.form.username,
+        password: this.form.password
+      })
+
+    },
+  },
+}
+</script>
+<style>
+body {
+  background-image: url('./assets/images/pet-background_1920x1080.jpg');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+</style>

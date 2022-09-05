@@ -13,7 +13,6 @@ export class PetDetails {
   type = "";
   sex = "";
   birthday = "";
-  microchipNumber: 0;
   breed = "";
   medical_history = "";
   status = "";

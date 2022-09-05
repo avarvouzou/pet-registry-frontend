@@ -2,6 +2,7 @@
   <div>
     <h3 class="font-weight-bold mt-5">
       <span>Pet registrations</span>
+      <span>Pet registrations</span>
       {{ test }}
     </h3>
     <hr class="mb-5 mt-5" />
@@ -208,7 +209,6 @@ export default Vue.extend({
 </script>
 <style scoped>
 .my-main {
-  max-width: 95%;
   margin-left: auto;
   margin-right: auto;
 }

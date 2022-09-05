@@ -1,7 +1,7 @@
 <template>
-  <div style="border-color: white; box-shadow: 0 0.125rem 0.625rem rgb(0 0 0 / 20%);npm run dev ">
+  <div style="border-color: white; box-shadow: 0 0.125rem 0.625rem rgb(0 0 0 / 20%);">
     <div class="d-flex align-items-center justify-content-left">
-      <b-button v-b-toggle.sidebar-1 style="border: none; background-color: transparent">
+      <b-button v-if="isLoggedIn" v-b-toggle.sidebar-1 style="border: none; background-color: transparent">
         <svg viewBox="0 0 20 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:45px; height:35px; color: black;">
           <defs>
             <path
@@ -19,10 +19,11 @@
 
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 
 export default Vue.extend({
   name: "TopBar",
+  props: ['isLoggedIn']
 });
 </script>

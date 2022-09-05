@@ -1,5 +1,7 @@
 <template>
-<div>sada</div>
+<div>
+  <h2>Welcome to the pet Registration system</h2>
+</div>
 </template>
 
 <script lang="ts">

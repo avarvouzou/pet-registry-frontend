@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-card>
-      <h3 class="mt-2">Create a new pet</h3>
-      <div style="max-width: 80%; margin: auto">
+    <div style="padding: 30px">
+      <h3 class="mt-2 mb-4">Create a new pet</h3>
+      <b-card style="max-width: 80%; margin: auto">
         <b-form novalidate class="mt-3" @submit.prevent="onSubmit" @reset="onReset">
 
         <div class="row">
@@ -59,6 +59,7 @@
               id="pet-microchip"
               v-model="createPetDetails.microchipNumber"
               placeholder="Enter Microchip Number"
+              type="number"
               required
               :state="microchipNumberValidation"
             ></b-form-input>
@@ -69,8 +70,8 @@
             <b-button type="submit" class="ml-2" variant="primary" >Create pet</b-button>
           </div>
           </b-form>
-      </div>
-    </b-card>
+      </b-card>
+    </div>
   </div>
 </template>
 

@@ -35,13 +35,11 @@ export default Vue.extend({
   },
   methods: {
     fetchUserDetails() {
-      this.$axios
-        .get('me')
-        .then((response) => {
-          console.log(response)
-          this.isLoggedIn = true;
-        })
-        .catch(this.$router.push('/login'))
+      this.$axios.get('/me')
+        .then((res) => {
+        console.log(res)
+      })
+        .catch(() => this.$router.push("login"))
     },
   },
 })

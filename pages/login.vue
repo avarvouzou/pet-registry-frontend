@@ -1,7 +1,7 @@
 <template>
   <div style="margin: auto; width: 50%; padding-top: 8rem">
     <h3 class="mt-5 mb-5">Please sign in</h3>
-    <b-form style="width: 30%; margin: auto" >
+    <b-form style="width: 30%; margin: auto" @submit.prevent="login" >
       <b-form-group
         id="username"
         label="Username:"
@@ -31,7 +31,7 @@
       </b-form-group>
 
       <b-button type="submit" variant="primary" style="width: 100%" class="mt-3"
-        @click="signIn">Sign in</b-button
+        >Sign in</b-button
       >
     </b-form>
   </div>
@@ -49,10 +49,16 @@ export default {
     }
   },
   methods: {
-    signIn() {
+    login() {
       this.$axios.post('/login', {
         username: this.form.username,
         password: this.form.password
+      }).then((response) => {
+        this.$store.commit('user/CHANGE_TOKEN', response.data.token)
+        this.$axios.setToken(this.$store.state.user.token, 'Bearer')
+        this.$axios.get('/me').then(
+          this.$router.push('/')
+        )
       })
 
     },

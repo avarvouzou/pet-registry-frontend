@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <top-bar :is-logged-in="isLoggedIn" class="topbar" />
-    <b-sidebar v-if="isLoggedIn" id="sidebar-1" title="Pet actions" shadow backdrop width="350px">
+    <top-bar v-if="isLoggedIn" :is-logged-in="isLoggedIn" :username="username" class="topbar" />
+    <b-sidebar v-if="isLoggedIn" id="sidebar-1" title="System actions" shadow backdrop width="350px">
       <side-bar />
     </b-sidebar>
     <main class="my-main">
@@ -25,9 +25,12 @@ export default Vue.extend({
     SideBar,
     FooterComponent,
   },
-  data() {
-    return {
-      isLoggedIn: false,
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.user.token;
+    },
+    username() {
+      return this.$store.state.user.details.name;
     }
   },
   mounted() {
@@ -35,11 +38,26 @@ export default Vue.extend({
   },
   methods: {
     fetchUserDetails() {
-      this.$axios.get('/me')
-        .then((res) => {
-        console.log(res)
+      this.$axios.get('/me').then((response) => {
+        const role = response.data.authorities.pop().authority
+        const details = {
+          name: response.data.name,
+          role,
+          authorities: response.data.authorities
+        };
+          this.$store.commit('user/SET_USER_DETAILS', details)
+
       })
-        .catch(() => this.$router.push("login"))
+        .catch(() => {
+          this.$store.commit('user/SET_USER_DETAILS', {
+            name: "",
+            role: "",
+            authorities: []
+          })
+          this.isLoggedIn = false;
+          this.$router.push("login")
+        })
+
     },
   },
 })

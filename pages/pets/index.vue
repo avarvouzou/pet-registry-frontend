@@ -1,25 +1,18 @@
 <template>
-  <div>
-    <h3 class="font-weight-bold mt-5">
-      <span>Pet registrations</span>
-      <span>Pet registrations</span>
+  <div style="background-color: #f8f8f8">
+    <h3 class="font-weight-bold pt-4">
+      <span>Pets</span>
       {{ test }}
     </h3>
     <hr class="mb-5 mt-5" />
     <div class="my-main">
       <b-table
-        :items="items"
+        :items="petDetails"
         :fields="fields"
-        :filter="filter"
-        :filter-included-fields="filterOn"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :sort-direction="sortDirection"
         stacked="md"
         show-empty
         small
         hover
-        @filtered="onFiltered"
       >
         <template #cell(name)="row" >
           <nuxt-link to="/pets">
@@ -27,10 +20,10 @@
           </nuxt-link>
         </template>
         <template #cell(actions)="row">
-          <b-button size="sm" variant="primary" @click="info(row.item, row.index, $event.target)" class="mr-1">
+          <b-button v-if="canReviewPet" size="sm" variant="primary" @click="" class="mr-1">
             Approve
           </b-button>
-          <b-button size="sm" variant="secondary" @click="info(row.item, row.index, $event.target)" class="mr-1">
+          <b-button v-if="canReviewPet" size="sm" variant="secondary" @click="" class="mr-1">
             Disapprove
           </b-button>
           <b-button size="sm" variant="info" @click="row.toggleDetails">
@@ -61,56 +54,23 @@
 
 <script>
 import Vue from "vue";
-import {PetDetails} from "@/models/Pet";
-
 export default Vue.extend({
   data() {
     return {
-      petDetails: new PetDetails(),
+      petDetails: [],
       test: null,
-      items: [
-        { isActive: true, age: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
-        { isActive: false, age: 21, name: { first: 'Larsen', last: 'Shaw' } },
-        {
-          isActive: false,
-          age: 9,
-          name: { first: 'Mini', last: 'Navarro' },
-        },
-        { isActive: false, age: 89, name: { first: 'Geneva', last: 'Wilson' } },
-        { isActive: true, age: 38, name: { first: 'Jami', last: 'Carney' } },
-        { isActive: false, age: 27, name: { first: 'Essie', last: 'Dunlap' } },
-        { isActive: true, age: 40, name: { first: 'Thor', last: 'Macdonald' } },
-        {
-          isActive: true,
-          age: 87,
-          name: { first: 'Larsen', last: 'Shaw' },
-        },
-        { isActive: false, age: 26, name: { first: 'Mitzi', last: 'Navarro' } },
-        { isActive: false, age: 22, name: { first: 'Genevieve', last: 'Wilson' } },
-        { isActive: true, age: 38, name: { first: 'John', last: 'Carney' } },
-        { isActive: false, age: 29, name: { first: 'Dick', last: 'Dunlap' } }
-      ],
       fields: [
-        { key: 'name', label: 'Person full name', sortable: true, sortDirection: 'desc' },
-        { key: 'age', label: 'Person age', sortable: true, class: 'text-center' },
-        {
-          key: 'isActive',
-          label: 'Is Active',
-          formatter: (value, key, item) => {
-            return value ? 'Yes' : 'No'
-          },
-          sortable: true,
-          sortByFormatted: true,
-          filterByFormatted: true
-        },
+        { key: 'name', label: 'Pet name' },
+        { key: 'microchipNumber', label: 'Microchip number' },
+        { key: 'type', label: 'Type' },
+        { key: 'sex', label: 'Gender' },
+        { key: 'birthday', label: 'Pet birthday', sortable: true, class: 'text-center' },
+        { key: 'breed', label: 'Breed' },
+        { key: 'medicalHistory', label: 'Medical History' },
+        { key: 'status', label: 'Status' },
         { key: 'actions', label: 'Actions' }
       ],
 
-      pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
-      sortBy: '',
-      sortDesc: false,
-      sortDirection: 'asc',
-      filter: null,
       filterOn: [],
       infoModal: {
         id: 'info-modal',
@@ -118,72 +78,31 @@ export default Vue.extend({
         content: ''
       },
       boxTwo: '',
-      columns: [
-        { key: "selected", label: "", sortable: false, order: 0 },
-        {
-          key: "id",
-          sortable: true,
-          label: "",
-          tdClass: "break-text-all",
-        },
-        {
-          key: "name",
-          sortable: true,
-          label: "realmname",
-          tdClass: "break-text-all",
-        },
-        {
-          key: "archived",
-          sortable: false,
-          label: ""
-        },
-        {
-          key: "actions",
-          sortable: false,
-          label: "", // empty label to leave column header blank
-          thClass: "",
-        },
-  ],
     }
   },
   computed: {
-    sortOptions() {
-      // Create an options list from our fields
-      return this.fields
-        .filter(f => f.sortable)
-        .map(f => {
-          return { text: f.label, value: f.key }
-        })
-    }
+    canReviewPet() {
+      return this.$store.state.user.details.authorities.find((element) => element.authority === "CAN_REVIEW_PET");
+    },
   },
-  // mounted() {
-  //   // Set the initial number of items
-  //   this.totalRows = this.items.length
-  // },
-  mounted () {
+  created () {
     this.$axios
-      .get('users/1')
-      .then(response => (this.info = response))
+      .get('/pets?own=true')
+      .then(response => ( this.petDetails = response.data))
   },
   methods: {
-    fetchPets() {
-      this.$axios
-        .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-        .then(response => (this.test = response))
-    },
     info(item, index, button) {
       this.infoModal.title = `Row index: ${index}`
       this.infoModal.content = JSON.stringify(item, null, 2)
       this.$root.$emit('bv::show::modal', this.infoModal.id, button)
     },
-    resetInfoModal() {
+    approvePet() {
       this.infoModal.title = ''
       this.infoModal.content = ''
     },
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length
-      this.currentPage = 1
+    resetInfoModal() {
+      this.infoModal.title = ''
+      this.infoModal.content = ''
     },
     showMsgBoxTwo() {
       this.boxTwo = ''

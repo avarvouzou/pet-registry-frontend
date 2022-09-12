@@ -77,6 +77,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+
 import { CreatePet } from "@/models/Pet";
 
 export default Vue.extend({
@@ -146,8 +147,11 @@ export default Vue.extend({
       }
       this.createPet();
     },
-    createPet() {
-      console.log('kkkk')
+    async createPet() {
+      // @ts-ignore
+      await this.$axios.post('/pets/', this.createPetDetails).then((response) => {
+       console.log(response)
+      })
     },
     onReset() {
       this.createPetDetails = new CreatePet;

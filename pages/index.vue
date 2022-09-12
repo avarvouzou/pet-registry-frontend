@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h2>Welcome to the pet Registration system</h2>
+  <h2 class="mt-4">Welcome to the pet Registration system!</h2>
 </div>
 </template>
 

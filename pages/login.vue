@@ -49,17 +49,36 @@ export default {
     }
   },
   methods: {
-    login() {
-      this.$axios.post('/login', {
+    async login() {
+      await this.$axios.post('/login', {
         username: this.form.username,
         password: this.form.password
       }).then((response) => {
         this.$store.commit('user/CHANGE_TOKEN', response.data.token)
         this.$axios.setToken(this.$store.state.user.token, 'Bearer')
-        this.$axios.get('/me').then(
-          this.$router.push('/')
-        )
+        this.$axios.get('/users').then((response) => console.log(response))
+        this.fetchUserDetails();
       })
+    },
+    async fetchUserDetails() {
+       await this.$axios.get('/me').then((response) => {
+        const role = response.data.authorities.pop().authority
+        this.username = response.data.name
+        const details = {
+          name: response.data.name,
+          role,
+          authorities: response.data.authorities
+        };
+        this.$store.commit('user/SET_USER_DETAILS', details)
+      })
+        .catch(() => {
+          this.$store.commit('user/SET_USER_DETAILS', {
+            name: "",
+            role: "",
+            authorities: []
+          })
+          this.$router.push("login")
+        }).finally(() =>  this.$router.push('/') )
 
     },
   },

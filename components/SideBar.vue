@@ -12,10 +12,15 @@
         </router-link>
       </b-nav-item>
       <b-nav-item v-if="canViewMunicipalityPets" class="sidebar-item" >
-        <span style="color: #6c757d">Municipality Pets</span>
+        <router-link :to="{ path: '/pets', query: { same: 'true' } }" >
+          <span style="color: #6c757d">Municipality pets</span>
+        </router-link>
       </b-nav-item>
       <b-nav-item v-if="canCreatePet" class="sidebar-item" to="/pets/create">
         <span style="color: #6c757d">Create a new Pet</span>
+      </b-nav-item>
+      <b-nav-item v-if="role === 'ROLE_ADMIN'" class="sidebar-item" to="/users/create">
+        <span style="color: #6c757d">Create User</span>
       </b-nav-item>
       <b-nav-item v-if="role === 'ROLE_ADMIN'" class="sidebar-item" to="/users">
         <span style="color: #6c757d">Users</span>

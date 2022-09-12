@@ -1,42 +1,24 @@
 <template>
   <div style="background-color: #f8f8f8">
     <h3 class="font-weight-bold mt-5">
-      <span>Pet registrations</span>
+      <span>Users</span>
       {{ test }}
     </h3>
     <hr class="mb-5 mt-5" />
     <div class="my-main">
       <b-table
-        :items="items"
+        :items="users"
         :fields="fields"
-        :filter="filter"
         :filter-included-fields="filterOn"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :sort-direction="sortDirection"
         stacked="md"
         show-empty
         small
         hover
         @filtered="onFiltered"
       >
-        <template #cell(name)="row" >
-          <nuxt-link to="/pets">
-            {{ row.value.first }} {{ row.value.last }}
-          </nuxt-link>
-        </template>
         <template #cell(actions)="row">
-          <b-button size="sm" variant="primary" @click="info(row.item, row.index, $event.target)" class="mr-1">
-            Approve
-          </b-button>
-          <b-button size="sm" variant="secondary" @click="info(row.item, row.index, $event.target)" class="mr-1">
-            Disapprove
-          </b-button>
-          <b-button size="sm" variant="info" @click="row.toggleDetails">
-            {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
-          </b-button>
           <b-button size="sm" variant="danger" @click="showMsgBoxTwo" class="mr-1">
-            Delete pet
+            Delete User
           </b-button>
         </template>
 
@@ -60,56 +42,17 @@
 
 <script>
 import Vue from "vue";
-import {PetDetails} from "@/models/Pet";
 
 export default Vue.extend({
   data() {
     return {
-      petDetails: new PetDetails(),
+      users: [],
       test: null,
-      items: [
-        { isActive: true, age: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
-        { isActive: false, age: 21, name: { first: 'Larsen', last: 'Shaw' } },
-        {
-          isActive: false,
-          age: 9,
-          name: { first: 'Mini', last: 'Navarro' },
-        },
-        { isActive: false, age: 89, name: { first: 'Geneva', last: 'Wilson' } },
-        { isActive: true, age: 38, name: { first: 'Jami', last: 'Carney' } },
-        { isActive: false, age: 27, name: { first: 'Essie', last: 'Dunlap' } },
-        { isActive: true, age: 40, name: { first: 'Thor', last: 'Macdonald' } },
-        {
-          isActive: true,
-          age: 87,
-          name: { first: 'Larsen', last: 'Shaw' },
-        },
-        { isActive: false, age: 26, name: { first: 'Mitzi', last: 'Navarro' } },
-        { isActive: false, age: 22, name: { first: 'Genevieve', last: 'Wilson' } },
-        { isActive: true, age: 38, name: { first: 'John', last: 'Carney' } },
-        { isActive: false, age: 29, name: { first: 'Dick', last: 'Dunlap' } }
-      ],
       fields: [
-        { key: 'name', label: 'Person full name', sortable: true, sortDirection: 'desc' },
-        { key: 'age', label: 'Person age', sortable: true, class: 'text-center' },
-        {
-          key: 'isActive',
-          label: 'Is Active',
-          formatter: (value, key, item) => {
-            return value ? 'Yes' : 'No'
-          },
-          sortable: true,
-          sortByFormatted: true,
-          filterByFormatted: true
-        },
+        { key: 'username', label: 'Username' },
+        { key: 'enabled', label: 'Enabled' },
         { key: 'actions', label: 'Actions' }
       ],
-
-      pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
-      sortBy: '',
-      sortDesc: false,
-      sortDirection: 'asc',
-      filter: null,
       filterOn: [],
       infoModal: {
         id: 'info-modal',
@@ -117,48 +60,12 @@ export default Vue.extend({
         content: ''
       },
       boxTwo: '',
-      columns: [
-        { key: "selected", label: "", sortable: false, order: 0 },
-        {
-          key: "id",
-          sortable: true,
-          label: "",
-          tdClass: "break-text-all",
-        },
-        {
-          key: "name",
-          sortable: true,
-          label: "realmname",
-          tdClass: "break-text-all",
-        },
-        {
-          key: "archived",
-          sortable: false,
-          label: ""
-        },
-        {
-          key: "actions",
-          sortable: false,
-          label: "", // empty label to leave column header blank
-          thClass: "",
-        },
-      ],
-    }
-  },
-  computed: {
-    sortOptions() {
-      // Create an options list from our fields
-      return this.fields
-        .filter(f => f.sortable)
-        .map(f => {
-          return { text: f.label, value: f.key }
-        })
     }
   },
   mounted () {
     this.$axios
       .get('/users')
-      .then(response => (console.log(response)))
+      .then(response => (this.users = response.data._embedded.users))
   },
   methods: {
     fetchPets() {

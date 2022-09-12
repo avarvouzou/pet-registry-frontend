@@ -9,7 +9,7 @@
         <nuxt />
       </div>
     </main>
-    <footer-component class="my-footer"></footer-component>
+<!--    <footer-component class="my-footer"></footer-component>-->
   </div>
 </template>
 <script>

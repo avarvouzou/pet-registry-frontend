@@ -14,13 +14,8 @@
         small
         hover
       >
-        <template #cell(name)="row" >
-          <nuxt-link to="/pets">
-            {{ row.value.first }} {{ row.value.last }}
-          </nuxt-link>
-        </template>
         <template #cell(actions)="row">
-          <b-button v-if="canReviewPet" size="sm" variant="primary" @click="" class="mr-1">
+          <b-button v-if="canReviewPet" size="sm" variant="primary" @click="approvePet(row.item.id)" class="mr-1">
             Approve
           </b-button>
           <b-button v-if="canReviewPet" size="sm" variant="secondary" @click="" class="mr-1">
@@ -29,7 +24,7 @@
           <b-button size="sm" variant="info" @click="row.toggleDetails">
             {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
           </b-button>
-          <b-button size="sm" variant="danger" @click="showMsgBoxTwo" class="mr-1">
+          <b-button v-if="canDeletePet" size="sm" variant="danger" @click="showMsgBoxTwo" class="mr-1">
             Delete pet
           </b-button>
         </template>
@@ -84,11 +79,33 @@ export default Vue.extend({
     canReviewPet() {
       return this.$store.state.user.details.authorities.find((element) => element.authority === "CAN_REVIEW_PET");
     },
+    canDeletePet() {
+      return this.$store.state.user.details.authorities.find((element) => element.authority === "CAN_DELETE_ANY_PET") ||
+        (this.$store.state.user.details.authorities.find((element) => element.authority === "CAN_DELETE_OWN_PETS") && this.$route.query.own);
+    },
   },
   created () {
-    this.$axios
-      .get('/pets?own=true')
-      .then(response => ( this.petDetails = response.data))
+    const own = this.$route.query.own
+    const status = this.$route.query.status
+    const same = this.$route.query.same
+    if (own) {
+      this.$axios
+        .get('/pets?own=true')
+        .then(response => ( this.petDetails = response.data))
+    } else if (status) {
+      this.$axios
+        .get('/pets?status=PENDING')
+        .then(response => ( this.petDetails = response.data))
+    } else if (same) {
+      this.$axios
+        .get('/pets?sameMunicipality=true')
+        .then(response => ( this.petDetails = response.data))
+    } else {
+      this.$axios
+        .get('/pets')
+        .then(response => ( this.petDetails = response.data))
+    }
+
   },
   methods: {
     info(item, index, button) {
@@ -96,9 +113,10 @@ export default Vue.extend({
       this.infoModal.content = JSON.stringify(item, null, 2)
       this.$root.$emit('bv::show::modal', this.infoModal.id, button)
     },
-    approvePet() {
-      this.infoModal.title = ''
-      this.infoModal.content = ''
+    approvePet(id) {
+      this.$axios
+        .put(`/pets/${id}/review`, {status: 'APPROVED', medicalHistory: ""})
+        .then(response => ( console.log(response)))
     },
     resetInfoModal() {
       this.infoModal.title = ''

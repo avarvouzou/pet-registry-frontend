@@ -1,4 +1,4 @@
-# pet-registry-with-nuxt
+# pet-registry-frontend
 
 ## Build Setup
 
